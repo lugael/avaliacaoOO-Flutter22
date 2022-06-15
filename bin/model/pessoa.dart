@@ -4,5 +4,4 @@ abstract class Pessoa {
   String? nome;
   DateTime? nascimento;
   String? endereco;
-
 }
