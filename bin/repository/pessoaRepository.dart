@@ -1,5 +1,5 @@
 import '../model/pessoa.dart';
-import '../ui/pessoa_repository_interface.dart';
+import 'pessoa_repository_interface.dart';
 
 class PessoaRepository implements IPessoaRepository{
   List<Pessoa> pessoas = [];
@@ -10,13 +10,19 @@ class PessoaRepository implements IPessoaRepository{
   }
 
   @override
-  void alterarPessoa(String email) {
-    // TODO: implement alterarPessoa
+  bool? alterarPessoa(Pessoa pessoa) {
+    return pessoas.any((element) {
+      if(element.codigo == pessoa.codigo){
+        element = pessoa;
+        return true;
+      }
+      return false;
+    });
   }
 
   @override
-  void excluirPessoa(String email) {
-    // TODO: implement excluirPessoa
+  void excluirPessoa(Pessoa pessoa) {
+    
   }
 
   @override

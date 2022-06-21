@@ -4,9 +4,9 @@ abstract class ICursoRepository {
 
   void criarCurso (Curso curso);
 
-  void alterarCurso (int codigo);
+  bool? alterarCurso (Curso curso);
 
-  void excluirCurso (int codigo);
+  void excluirCurso (Curso curso);
 
   void listarCurso ();
 }

@@ -4,12 +4,12 @@ abstract class IPessoaRepository {
 
   void adicionarPessoa(Pessoa pessoa);
 
-  void alterarPessoa(String email);
+  void alterarPessoa(Pessoa pessoa);
 
-  void excluirPessoa(String email);
+  void excluirPessoa(Pessoa pessoa);
 
   void listarPessoa();
 
-  void buscarPessoa(String? email, int? codigo);
+  Pessoa? buscarPessoa(String? email, int? codigo);
 
 }
