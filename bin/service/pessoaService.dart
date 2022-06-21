@@ -29,7 +29,10 @@ class PessoaService{
   }
 
   void excluirCadastro(String? email){
-    Pessoa? verifica = pessoaRepository.buscarPessoa(email, null);
+    Pessoa? alunoExiste = pessoaRepository.buscarPessoa(email, null);
+    if(alunoExiste != null){
+      bool verifica = cursoService.existeAluno(alunoExiste);
+    }
 
   }
 }
