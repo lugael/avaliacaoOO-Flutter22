@@ -10,10 +10,6 @@ abstract class IPessoaRepository {
 
   void listarPessoa();
 
-<<<<<<< HEAD
-  
-=======
   void buscarPessoa(String? email, int? codigo);
->>>>>>> 1045920084df0860770ec56fbb94b3b3ba4f603a
 
 }
