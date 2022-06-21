@@ -2,37 +2,46 @@ import '../model/pessoa.dart';
 import '../repository/pessoaRepository.dart';
 import 'cursoService.dart';
 
-class PessoaService{
+class PessoaService {
   PessoaRepository pessoaRepository;
-  
+
   late CursoService cursoService;
 
-  PessoaService(this.pessoaRepository); 
+  PessoaService(this.pessoaRepository);
 
-  void adicionaCadastro(Pessoa pessoa){
-    Pessoa? verifica = pessoaRepository.buscarPessoa(pessoa.email, null);
-    if(verifica == null){
-      pessoaRepository.pessoas.add(pessoa);
-    }else{
+  void adiciona(Pessoa pessoa) {
+    Pessoa? verificaExistencia = pessoaRepository.buscarPessoa(pessoa.email, null);
+    if (verificaExistencia == null) {
+      pessoaRepository.adicionarPessoa(pessoa);
+    } else {
       print('Email já existe');
     }
   }
 
-  void alteraCadastro(String? email, int? codigo){
-    Pessoa? verifica = pessoaRepository.buscarPessoa(email, codigo);
-    if(verifica != null){
-  
-      pessoaRepository.alterarPessoa(verifica);
-    }else{
+  void altera(Pessoa? pessoa) {
+    Pessoa? verificaExistencia = pessoaRepository.buscarPessoa(pessoa?.email, pessoa?.codigo);
+    if (verificaExistencia != null) {
+      pessoaRepository.alterarPessoa(pessoa!);
+    } else {
       print('Cadastro não encontrado');
     }
   }
 
-  void excluirCadastro(String? email){
-    Pessoa? alunoExiste = pessoaRepository.buscarPessoa(email, null);
-    if(alunoExiste != null){
-      bool verifica = cursoService.existeAluno(alunoExiste);
+  void excluir(String? email) {
+    Pessoa? cadastroExiste = pessoaRepository.buscarPessoa(email, null);
+    if (cadastroExiste != null) {
+      bool verifica = cursoService.existeAluno(cadastroExiste);
+      if(!verifica){
+        pessoaRepository.excluirPessoa(cadastroExiste);
+      }else{
+        print('O aluno faz parte de um curso');
+      }
+    }else{
+      print('Cadastro não existe');
     }
+  }
 
+  void listar(bool isAluno){
+    pessoaRepository.listarPessoa(isAluno);
   }
 }
