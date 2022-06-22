@@ -8,7 +8,7 @@ abstract class IPessoaRepository {
 
   void excluirPessoa(Pessoa pessoa);
 
-  void listarPessoa();
+  void listarPessoa(bool isAluno);
 
   Pessoa? buscarPessoa(String? email, int? codigo);
 

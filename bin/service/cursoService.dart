@@ -7,7 +7,7 @@ class CursoService {
   late PessoaService pessoaService;
   CursoService(this.cursoRepository);
 
-   bool existeAluno(Pessoa aluno){
-      return cursoRepository.existeAluno(aluno);
-  } 
+  bool existeAluno(Pessoa aluno) {
+    return cursoRepository.existeAluno(aluno);
+  }
 }
