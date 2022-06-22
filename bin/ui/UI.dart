@@ -166,18 +166,60 @@ class Ui {
     // email
   }
 
-  void listarAluno() {
-    pessoaService.listar(true);
+  void listarAluno() {}
+
+  void criarProfessor() {
+    print('Informe o email do Professor');
+    String email = stdin.readLineSync()!;
+    print('Informe o nome do Professor');
+    String nome = stdin.readLineSync()!;
+    print('Informe o nascimento do Professor no formato 00/00/0000');
+    DateTime? nascimento = df.parse(stdin.readLineSync()!);
+    print('Informe o endereço do Professor');
+    String endereco = stdin.readLineSync()!;
+    print('Informe o salário do Professor');
+    double salario = double.parse(stdin.readLineSync()!);
   }
 
-  void criarProfessor() {}
-  void alterarProfessor() {}
-  void excluirProfessor() {}
+  void alterarProfessor() {
+    print('Informe o email do Professor');
+    String email = stdin.readLineSync()!;
+    print('Informe o nome do Professor');
+    String? nome = stdin.readLineSync();
+    print('Informe o nascimento do Professor no formato 00/00/0000');
+    DateTime? nascimento = df.parse(stdin.readLineSync()!);
+    print('Informe o endereço do Professor');
+    String? endereco = stdin.readLineSync();
+    print('Informe o salário do Professor');
+    double? salario = double.tryParse(stdin.readLineSync()!);
+  }
+
+  void excluirProfessor() {
+    print('Informe o email do Professor');
+    String email = stdin.readLineSync()!;
+  }
+
   void listarProfessor() {}
 
-  void criarCurso() {}
-  void alterarCurso() {}
-  void excluirCurso() {}
+  void criarCurso() {
+    print('Informe o nome do Curso');
+    String nome = stdin.readLineSync()!;
+    print('Informe o total de alunos do Curso');
+    int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+  }
+
+  void alterarCurso() {
+    print('Informe o nome do Curso');
+    String nome = stdin.readLineSync()!;
+    print('Informe o total de alunos do Curso');
+    int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+  }
+
+  void excluirCurso() {
+    print('Informe o código do Curso');
+    int? codigoCurso = int.tryParse(stdin.readLineSync()!);
+  }
+
   void listarCurso() {}
 }
 
