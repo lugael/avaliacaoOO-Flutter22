@@ -45,16 +45,16 @@ class Ui {
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
-          criarAluno;
+          criarAluno();
           break;
         case '2':
-          alterarAluno;
+          alterarAluno();
           break;
         case '3':
-          excluirAluno;
+          excluirAluno();
           break;
         case '4':
-          listarAluno;
+          listarAluno();
           break;
       }
     } while (opc != '5');
@@ -68,16 +68,16 @@ class Ui {
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
-          criarProfessor;
+          criarProfessor();
           break;
         case '2':
-          alterarProfessor;
+          alterarProfessor();
           break;
         case '3':
-          excluirProfessor;
+          excluirProfessor();
           break;
         case '4':
-          listarProfessor;
+          listarProfessor();
           break;
       }
     } while (opc != '5');
@@ -91,16 +91,16 @@ class Ui {
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
-          criarCurso;
+          criarCurso();
           break;
         case '2':
-          alterarCurso;
+          alterarCurso();
           break;
         case '3':
-          excluirCurso;
+          excluirCurso();
           break;
         case '4':
-          listarCurso;
+          listarCurso();
           break;
       }
     } while (opc != '5');
@@ -134,16 +134,61 @@ class Ui {
     String email = stdin.readLineSync()!;
     // email
   }
+
   void listarAluno() {}
 
-  void criarProfessor() {}
-  void alterarProfessor() {}
-  void excluirProfessor() {}
+  void criarProfessor() {
+    print('Informe o email do Professor');
+    String email = stdin.readLineSync()!;
+    print('Informe o nome do Professor');
+    String nome = stdin.readLineSync()!;
+    print('Informe o nascimento do Professor no formato 00/00/0000');
+    DateTime? nascimento = df.parse(stdin.readLineSync()!);
+    print('Informe o endereço do Professor');
+    String endereco = stdin.readLineSync()!;
+    print('Informe o salário do Professor');
+    double salario = double.parse(stdin.readLineSync()!);
+  }
+
+  void alterarProfessor() {
+    print('Informe o email do Professor');
+    String email = stdin.readLineSync()!;
+    print('Informe o nome do Professor');
+    String? nome = stdin.readLineSync();
+    print('Informe o nascimento do Professor no formato 00/00/0000');
+    DateTime? nascimento = df.parse(stdin.readLineSync()!);
+    print('Informe o endereço do Professor');
+    String? endereco = stdin.readLineSync();
+    print('Informe o salário do Professor');
+    double? salario = double.tryParse(stdin.readLineSync()!);
+  }
+
+  void excluirProfessor() {
+    print('Informe o email do Professor');
+    String email = stdin.readLineSync()!;
+  }
+
   void listarProfessor() {}
 
-  void criarCurso() {}
-  void alterarCurso() {}
-  void excluirCurso() {}
+  void criarCurso() {
+    print('Informe o nome do Curso');
+    String nome = stdin.readLineSync()!;
+    print('Informe o total de alunos do Curso');
+    int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+  }
+
+  void alterarCurso() {
+    print('Informe o nome do Curso');
+    String nome = stdin.readLineSync()!;
+    print('Informe o total de alunos do Curso');
+    int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+  }
+
+  void excluirCurso() {
+    print('Informe o código do Curso');
+    int? codigoCurso = int.tryParse(stdin.readLineSync()!);
+  }
+
   void listarCurso() {}
 }
 
