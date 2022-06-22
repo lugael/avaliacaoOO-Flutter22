@@ -18,13 +18,9 @@ class PessoaService {
     }
   }
 
-  void altera(Pessoa? pessoa) {
-    Pessoa? verificaExistencia = pessoaRepository.buscarPessoa(pessoa?.email, pessoa?.codigo);
-    if (verificaExistencia != null) {
-      pessoaRepository.alterarPessoa(pessoa!);
-    } else {
-      print('Cadastro não encontrado');
-    }
+  void altera(int? codigo, String? email, String? nome, DateTime? nascimento, String? endereco,) {
+    pessoaRepository.alterarPessoa(codigo, email, nome, nascimento, endereco);
+    
   }
 
   void excluir(String? email) {
@@ -43,5 +39,9 @@ class PessoaService {
 
   void listar(bool isAluno){
     pessoaRepository.listarPessoa(isAluno);
+  }
+
+  Pessoa? busca(String? email, int? codigo){
+     return pessoaRepository.buscarPessoa(email, codigo);
   }
 }

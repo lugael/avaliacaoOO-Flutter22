@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
+import '../model/aluno.dart';
 import '../model/curso.dart';
 import '../model/pessoa.dart';
 import '../repository/cursoRepository.dart';
@@ -32,7 +33,11 @@ class Ui {
         case '3':
           curso();
           break;
+        case '4':
+          print('Saindo...');
+          break;
         default:
+          print('Valor invalido');
       }
     } while (opc != '4');
   }
@@ -45,17 +50,22 @@ class Ui {
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
-          criarAluno;
+          criarAluno();
           break;
         case '2':
-          alterarAluno;
+          alterarAluno();
           break;
         case '3':
-          excluirAluno;
+          excluirAluno();
           break;
         case '4':
-          listarAluno;
+          listarAluno();
           break;
+        case '5':
+          print('Saindo...');
+          break;
+        default:
+          print('Valor invalido');
       }
     } while (opc != '5');
   }
@@ -68,17 +78,22 @@ class Ui {
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
-          criarProfessor;
+          criarProfessor();
           break;
         case '2':
-          alterarProfessor;
+          alterarProfessor();
           break;
         case '3':
-          excluirProfessor;
+          excluirProfessor();
           break;
         case '4':
-          listarProfessor;
+          listarProfessor();
           break;
+        case '5':
+          print('Saindo...');
+          break;
+        default:
+          print('Valor invalido');
       }
     } while (opc != '5');
   }
@@ -91,17 +106,22 @@ class Ui {
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
-          criarCurso;
+          criarCurso();
           break;
         case '2':
-          alterarCurso;
+          alterarCurso();
           break;
         case '3':
-          excluirCurso;
+          excluirCurso();
           break;
         case '4':
-          listarCurso;
+          listarCurso();
           break;
+        case '5':
+          print('Saindo...');
+          break;
+        default:
+          print('Valor invalido');
       }
     } while (opc != '5');
   }
@@ -115,26 +135,40 @@ class Ui {
     DateTime nascimento = df.parse(stdin.readLineSync()!);
     print('Informe o endereço do aluno');
     String? endereco = stdin.readLineSync();
+    Pessoa aluno = Aluno(
+        nome: nome, email: email, nascimento: nascimento, endereco: endereco);
+    pessoaService.adiciona(aluno);
   }
 
   void alterarAluno() {
     print('Informe o email do Aluno');
     String email = stdin.readLineSync()!;
-    print('Informe o nome do Aluno');
-    String? nome = stdin.readLineSync();
-    print('Informe o nascimento do Aluno no formato 00/00/0000');
-    DateTime? nascimento = df.parse(stdin.readLineSync()!);
-    print('Informe o endereço do Aluno');
-    String? endereco = stdin.readLineSync();
+    Pessoa? verificaExistencia = pessoaService.busca(email, null);
+    if(verificaExistencia != null){
+      print('Informe o nome do Aluno');
+      String? nome = stdin.readLineSync();
+      print('Informe o nascimento do Aluno no formato 00/00/0000');
+      DateTime? nascimento = df.parse(stdin.readLineSync()!);
+      print('Informe o endereço do Aluno');
+      String? endereco = stdin.readLineSync();
+      pessoaService.altera(verificaExistencia.codigo, email, nome, nascimento, endereco);
+    }else{
+      print('Cadastros não encontrado');
+    }
+    
     // email - nome - nascimento - endereco
   }
 
   void excluirAluno() {
     print('Informe o email do Aluno');
     String email = stdin.readLineSync()!;
+    pessoaService.excluir(email);
     // email
   }
-  void listarAluno() {}
+
+  void listarAluno() {
+    pessoaService.listar(true);
+  }
 
   void criarProfessor() {}
   void alterarProfessor() {}

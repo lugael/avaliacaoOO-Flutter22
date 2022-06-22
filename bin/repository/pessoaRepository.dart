@@ -12,13 +12,13 @@ class PessoaRepository implements IPessoaRepository {
   }
 
   @override
-  bool? alterarPessoa(Pessoa pessoa) {
+  bool? alterarPessoa(int? codigo,String? email, String? nome, DateTime? nascimento, String? endereco) {
     return pessoas.any((element) {
-      if (element.codigo == pessoa.codigo) {
-        pessoa.nome != null ? element.nome = pessoa.nome : '';
-        pessoa.email != null ? element.email = pessoa.email : '';
-        pessoa.nascimento != null  ? element.nascimento = pessoa.nascimento : '';
-        pessoa.endereco != null ? element.endereco = pessoa.endereco : '';
+      if (element.codigo == codigo) {
+        nome != null ? element.nome = nome : '';
+        email != null ? element.email = email : '';
+        nascimento != null  ? element.nascimento = nascimento : '';
+        endereco != null ? element.endereco = endereco : '';
         return true;
       }
       return false;
@@ -43,12 +43,15 @@ class PessoaRepository implements IPessoaRepository {
 
   @override
   Pessoa? buscarPessoa(String? email, int? codigo) {
+    if(pessoas.isEmpty){
+      return null;
+    }
+    
     if (email != null) {
       return pessoas.firstWhere((element) => element.email == email);
     } else if (codigo != null) {
       return pessoas.firstWhere((element) => element.codigo == codigo);
-    } else {
-      return null;
     }
+    return null;
   }
 }
