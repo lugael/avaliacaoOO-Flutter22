@@ -9,16 +9,19 @@ class PessoaRepository implements IPessoaRepository {
   @override
   void adicionarPessoa(Pessoa pessoa) {
     pessoas.add(pessoa);
+    print('object');
   }
 
   @override
-  bool? alterarPessoa(int? codigo,String? email, String? nome, DateTime? nascimento, String? endereco) {
+  bool? alterarPessoa(int? codigo,String? email, String? nome, DateTime? nascimento, String? endereco, double? salario) {
     return pessoas.any((element) {
       if (element.codigo == codigo) {
         nome != null ? element.nome = nome : '';
         email != null ? element.email = email : '';
         nascimento != null  ? element.nascimento = nascimento : '';
         endereco != null ? element.endereco = endereco : '';
+        if(element is Professor)
+        salario != null ? element.salario = salario : '';
         return true;
       }
       return false;
@@ -35,7 +38,7 @@ class PessoaRepository implements IPessoaRepository {
     for (var pessoa in pessoas) {
       if (pessoa is Aluno && isAluno) {
         print(pessoa);
-      }else if(pessoa is Professor && !isAluno){
+      }else if(pessoa is Professor){
         print(pessoa);
       }
     }

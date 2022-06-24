@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import '../model/pessoa.dart';
 import '../repository/pessoaRepository.dart';
 import 'cursoService.dart';
@@ -10,16 +12,12 @@ class PessoaService {
   PessoaService(this.pessoaRepository);
 
   void adiciona(Pessoa pessoa) {
-    Pessoa? verificaExistencia = pessoaRepository.buscarPessoa(pessoa.email, null);
-    if (verificaExistencia == null) {
-      pessoaRepository.adicionarPessoa(pessoa);
-    } else {
-      print('Email já existe');
-    }
+    pessoaRepository.adicionarPessoa(pessoa);
   }
 
-  void altera(int? codigo, String? email, String? nome, DateTime? nascimento, String? endereco,) {
-    pessoaRepository.alterarPessoa(codigo, email, nome, nascimento, endereco);
+  void altera(String? email, String? nome, DateTime? nascimento, String? endereco, double? salario) {
+    Pessoa? verificaExistencia = pessoaRepository.buscarPessoa(email, null);
+    pessoaRepository.alterarPessoa(verificaExistencia!.codigo, email, nome, nascimento, endereco, salario);
     
   }
 
@@ -41,7 +39,11 @@ class PessoaService {
     pessoaRepository.listarPessoa(isAluno);
   }
 
+  bool cadastroExiste(String email){
+    return pessoaRepository.pessoas.any((element) => element.email == email);
+  }
+
   Pessoa? busca(String? email, int? codigo){
-     return pessoaRepository.buscarPessoa(email, codigo);
+    return pessoaRepository.buscarPessoa(email, codigo);
   }
 }

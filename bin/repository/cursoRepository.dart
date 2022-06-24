@@ -12,10 +12,11 @@ class CursoRepository implements ICursoRepository{
   }
 
   @override
-  bool? alterarCurso(Curso curso) {
+  bool? alterarCurso(int codigo, String? nome, int? qtdPessoas) {
     return cursos.any((element) {
-      if(element.codigo == curso.codigo){
-        element = curso;
+      if(element.codigo == codigo){
+        nome != null ? element.nome = nome : '';
+        qtdPessoas != null ? element.totalAlunos = qtdPessoas : '';
         return true;
       }
       return false;
@@ -24,12 +25,20 @@ class CursoRepository implements ICursoRepository{
 
   @override
   void excluirCurso(Curso curso) {
-    // TODO: implement excluirCurso
+    cursos.remove(curso);
   }
 
   @override
   void listarCurso() {
-    // TODO: implement listarCurso
+    for (var curso in cursos) {
+      print(curso);
+    }
+  }
+
+  void listarCodigo(){
+     for (var curso in cursos) {
+      print('Cógigo: ${curso.codigo} \nNome: ${curso.nome}');
+    }
   }
 
   bool existeAluno(Pessoa aluno){

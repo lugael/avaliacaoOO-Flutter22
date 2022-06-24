@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../model/aluno.dart';
 import '../model/curso.dart';
 import '../model/pessoa.dart';
+import '../model/professor.dart';
 import '../repository/cursoRepository.dart';
 import '../repository/pessoaRepository.dart';
 import '../service/cursoService.dart';
@@ -127,97 +128,140 @@ class Ui {
   }
 
   void criarAluno() {
-    print('Informe o nome do Aluno');
-    String nome = stdin.readLineSync()!;
     print('Informe o email do Aluno');
     String email = stdin.readLineSync()!;
-    print('Informe o nascimento do Aluno no formato 00/00/0000');
-    DateTime nascimento = df.parse(stdin.readLineSync()!);
-    print('Informe o endereço do aluno');
-    String? endereco = stdin.readLineSync();
-    Pessoa aluno = Aluno(
-        nome: nome, email: email, nascimento: nascimento, endereco: endereco);
-    pessoaService.adiciona(aluno);
+    bool verificaExistencia = pessoaService.cadastroExiste(email);
+    if (!verificaExistencia) {
+      print('Informe o nome do Aluno');
+      String nome = stdin.readLineSync()!;
+      print('Informe o nascimento do Aluno no formato 00/00/0000');
+      DateTime nascimento = df.parse(stdin.readLineSync()!);
+      print('Informe o endereço do aluno');
+      String? endereco = stdin.readLineSync();
+      Pessoa aluno = Aluno(
+          nome: nome, email: email, nascimento: nascimento, endereco: endereco);
+      pessoaService.adiciona(aluno);
+    } else {
+      print('Cadastro já existe');
+    }
   }
 
   void alterarAluno() {
     print('Informe o email do Aluno');
     String email = stdin.readLineSync()!;
-    Pessoa? verificaExistencia = pessoaService.busca(email, null);
-    if(verificaExistencia != null){
+    bool verificaExistencia = pessoaService.cadastroExiste(email);
+    if (verificaExistencia) {
       print('Informe o nome do Aluno');
       String? nome = stdin.readLineSync();
       print('Informe o nascimento do Aluno no formato 00/00/0000');
       DateTime? nascimento = df.parse(stdin.readLineSync()!);
       print('Informe o endereço do Aluno');
       String? endereco = stdin.readLineSync();
-      pessoaService.altera(verificaExistencia.codigo, email, nome, nascimento, endereco);
-    }else{
-      print('Cadastros não encontrado');
+      pessoaService.altera(email, nome, nascimento, endereco, null);
+    } else {
+      print('Cadastro não encontrado');
     }
-    
+
     // email - nome - nascimento - endereco
   }
 
   void excluirAluno() {
     print('Informe o email do Aluno');
     String email = stdin.readLineSync()!;
-    pessoaService.excluir(email);
-    // email
+    bool verificaExiste = pessoaService.cadastroExiste(email);
+    Pessoa? isProfessor = pessoaService.busca(email, null);
+    if (verificaExiste && isProfessor is Aluno) {
+      pessoaService.excluir(email);
+    }
   }
 
-  void listarAluno() {}
+  void listarAluno() {
+    pessoaService.listar(true);
+  }
 
   void criarProfessor() {
     print('Informe o email do Professor');
     String email = stdin.readLineSync()!;
-    print('Informe o nome do Professor');
-    String nome = stdin.readLineSync()!;
-    print('Informe o nascimento do Professor no formato 00/00/0000');
-    DateTime? nascimento = df.parse(stdin.readLineSync()!);
-    print('Informe o endereço do Professor');
-    String endereco = stdin.readLineSync()!;
-    print('Informe o salário do Professor');
-    double salario = double.parse(stdin.readLineSync()!);
+    bool verificaExiste = pessoaService.cadastroExiste(email);
+    if (!verificaExiste) {
+      print('Informe o nome do Professor');
+      String nome = stdin.readLineSync()!;
+      print('Informe o nascimento do Professor no formato 00/00/0000');
+      DateTime? nascimento = df.parse(stdin.readLineSync()!);
+      print('Informe o endereço do Professor');
+      String endereco = stdin.readLineSync()!;
+      print('Informe o salário do Professor');
+      double salario = double.parse(stdin.readLineSync()!);
+      Pessoa professor = Professor(
+          nome: nome, email: email, nascimento: nascimento, salario: salario);
+      pessoaService.adiciona(professor);
+    } else {
+      print('Cadastro já existe');
+    }
   }
 
   void alterarProfessor() {
     print('Informe o email do Professor');
     String email = stdin.readLineSync()!;
-    print('Informe o nome do Professor');
-    String? nome = stdin.readLineSync();
-    print('Informe o nascimento do Professor no formato 00/00/0000');
-    DateTime? nascimento = df.parse(stdin.readLineSync()!);
-    print('Informe o endereço do Professor');
-    String? endereco = stdin.readLineSync();
-    print('Informe o salário do Professor');
-    double? salario = double.tryParse(stdin.readLineSync()!);
+    bool verificaExiste = pessoaService.cadastroExiste(email);
+    Pessoa? isProfessor = pessoaService.busca(email, null);
+    if (verificaExiste && isProfessor is Professor) {
+      print('Informe o nome do Professor');
+      String? nome = stdin.readLineSync();
+      print('Informe o nascimento do Professor no formato 00/00/0000');
+      DateTime? nascimento = df.parse(stdin.readLineSync()!);
+      print('Informe o endereço do Professor');
+      String? endereco = stdin.readLineSync();
+      print('Informe o salário do Professor');
+      double? salario = double.tryParse(stdin.readLineSync()!);
+      pessoaService.altera(email, nome, nascimento, endereco, salario);
+    } else {
+      print('Cadastro não encontrado');
+    }
   }
 
   void excluirProfessor() {
     print('Informe o email do Professor');
     String email = stdin.readLineSync()!;
+    bool verificaExiste = pessoaService.cadastroExiste(email);
+    Pessoa? isProfessor = pessoaService.busca(email, null);
+    if (verificaExiste && isProfessor is Professor) {
+      pessoaService.excluir(email);
+    }
   }
 
-  void listarProfessor() {}
+  void listarProfessor() {
+    pessoaService.listar(false);
+  }
 
   void criarCurso() {
     print('Informe o nome do Curso');
     String nome = stdin.readLineSync()!;
     print('Informe o total de alunos do Curso');
     int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+    
   }
 
   void alterarCurso() {
-    print('Informe o nome do Curso');
-    String nome = stdin.readLineSync()!;
-    print('Informe o total de alunos do Curso');
-    int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+    cursoService.mostraCodigos();
+    print('Informe o código do curso para alterar');
+    int? codigo = int.tryParse(stdin.readLineSync()!);
+    if(codigo != null? cursoService.cursoExiste(codigo) : false){
+      print('Informe o nome do Curso');
+      String? nome = stdin.readLineSync();
+      print('Informe o total de alunos do Curso');
+      int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+      cursoService.altera(codigo, nome, totalAlunos);
+    }else{
+      print('Curso não encontrado');
+    }
   }
 
   void excluirCurso() {
+    cursoService.mostraCodigos();
     print('Informe o código do Curso');
     int? codigoCurso = int.tryParse(stdin.readLineSync()!);
+
   }
 
   void listarCurso() {}
