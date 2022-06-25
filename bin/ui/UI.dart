@@ -237,16 +237,23 @@ class Ui {
   void criarCurso() {
     print('Informe o nome do Curso');
     String nome = stdin.readLineSync()!;
-    print('Informe o total de alunos do Curso');
-    int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+    if(!cursoService.cursoExiste(null, nome)){
+      print('Informe o total de alunos do Curso');
+      int totalAlunos = int.parse(stdin.readLineSync()!);
+      Curso curso = Curso(nome, totalAlunos);
+      cursoService.adiciona(curso);
+    }else{
+      print('Curso já existe');
+    }
+
     
   }
 
   void alterarCurso() {
     cursoService.mostraCodigos();
     print('Informe o código do curso para alterar');
-    int? codigo = int.tryParse(stdin.readLineSync()!);
-    if(codigo != null? cursoService.cursoExiste(codigo) : false){
+    int codigo = int.parse(stdin.readLineSync()!);
+    if(cursoService.cursoExiste(codigo, null)){
       print('Informe o nome do Curso');
       String? nome = stdin.readLineSync();
       print('Informe o total de alunos do Curso');
@@ -261,10 +268,16 @@ class Ui {
     cursoService.mostraCodigos();
     print('Informe o código do Curso');
     int? codigoCurso = int.tryParse(stdin.readLineSync()!);
-
+    if(cursoService.cursoExiste(codigoCurso, null)){
+      cursoService.excluir(codigoCurso!);
+    }else{
+      print('Curso não encontrado');
+    }
   }
 
-  void listarCurso() {}
+  void listarCurso() {
+    cursoService.listar();
+  }
 }
 
 // criarAluno, alterar, excluir, listar

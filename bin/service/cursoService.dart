@@ -16,8 +16,13 @@ class CursoService {
     cursoRepository.alterarCurso(codigo, nome, qtdPessoas);
   }
 
-  bool cursoExiste(int codigo){
-    return cursoRepository.cursos.any((element) => element.codigo == codigo);
+  bool cursoExiste(int? codigo, String? nome){
+    if (codigo != null) {
+      return cursoRepository.cursos.any((element) => element.codigo == codigo);
+    }else if (nome != null) {
+      return cursoRepository.cursos.any((element) => element.nome == nome);
+    }
+    return false; 
   }
 
   bool existeAluno(Pessoa aluno) {
@@ -26,5 +31,19 @@ class CursoService {
 
   void mostraCodigos(){
     cursoRepository.listarCodigo();
+  }
+
+  void listar(){
+    cursoRepository.listarCurso();
+  }
+
+  void excluir(int codigo){
+    Curso curso = cursoRepository.cursos.firstWhere((element) => element.codigo == codigo);
+    if (curso.pessoas.isEmpty) {
+      cursoRepository.excluirCurso(curso);
+    }else{
+      print('Curso possui aluno');
+    }
+
   }
 }

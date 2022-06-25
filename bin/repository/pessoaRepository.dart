@@ -57,4 +57,14 @@ class PessoaRepository implements IPessoaRepository {
     }
     return null;
   }
+
+  void listarPorCodigo(bool isAluno){
+    for (var pessoa in pessoas) {
+      if (pessoa is Aluno && isAluno) {
+        print('Código: ${pessoa.codigo} Nome: ${pessoa.nome}');
+      }else if(pessoa is Professor){
+        print('Código: ${pessoa.codigo} Nome: ${pessoa.nome}');
+      }
+    }
+  }
 }

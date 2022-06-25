@@ -46,4 +46,8 @@ class PessoaService {
   Pessoa? busca(String? email, int? codigo){
     return pessoaRepository.buscarPessoa(email, codigo);
   }
+
+  void buscarCodigo(bool isAluno){
+    pessoaRepository.listarPorCodigo(isAluno);
+  }
 }
