@@ -1,5 +1,6 @@
 import 'aluno.dart';
 import 'pessoa.dart';
+import 'professor.dart';
 
 class Curso {
   static int contador = 0;
@@ -8,27 +9,26 @@ class Curso {
   int totalAlunos;
   List<Pessoa> pessoas = [];
 
-  Curso(this.nome, this.totalAlunos){
+  Curso(this.nome, this.totalAlunos) {
     contador++;
     codigo = contador;
   }
 
   @override
   String toString() {
-    return 'Codigo: $codigo \nNome: $nome \nTotal de alunos: $totalAlunos \nProfessores: $listarProfesores() \nAlunos: $listarAlunos()';
-  }
-
-  listarAlunos(){
-    for (var pessoa in pessoas ) {
-      if (pessoa is Aluno) {
-        print('Aluno: ${pessoa.nome}');
+    String profesores = '';
+    String alunos = '';
+    for (var pessoa in pessoas) {
+      if (pessoa is Professor) {
+        profesores + 'Professor: ${pessoa.nome}';
       }
     }
+     for (var pessoa in pessoas) {
+      if (pessoa is Aluno) {
+        alunos + 'Aluno: ${pessoa.nome}';
+      }
+    }
+    return 'Codigo: $codigo \nNome: $nome \nTotal de alunos: $totalAlunos ${profesores != '' ? }\nProfessores: $listarProfesores() \nAlunos: $listarAlunos()';
   }
 
-  listarProfesores(){
-    for (var pessoa in pessoas) {
-      print('Professor: ${pessoa.nome}');
-    }
-  }
 }

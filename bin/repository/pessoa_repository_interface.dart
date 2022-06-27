@@ -1,3 +1,4 @@
+import '../model/notaAluno.dart';
 import '../model/pessoa.dart';
 
 abstract class IPessoaRepository {

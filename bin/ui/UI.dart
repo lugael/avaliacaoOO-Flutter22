@@ -17,12 +17,15 @@ class Ui {
   Ui() {
     cursoService = CursoService(CursoRepository());
     pessoaService = PessoaService(PessoaRepository());
+    
+    cursoService.pessoaService = pessoaService;
+    pessoaService.cursoService = cursoService;
   }
 
   void show() {
     String? opc;
     do {
-      print('Digite 1 para Alunos, 2 para Professores, ou 3 para Curso');
+      print('Escolha: \n1-Alunos \n2-Professores \n3-Cursos \n4-Sair');
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
@@ -47,7 +50,7 @@ class Ui {
     String? opc;
     do {
       print(
-          'Digite 1 para criar, 2 para alterar, 3 para excluir, 4 para listar ou 5 para sair');
+          'Sobre alunos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de alunos \n5-voltar');
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
@@ -63,7 +66,6 @@ class Ui {
           listarAluno();
           break;
         case '5':
-          print('Saindo...');
           break;
         default:
           print('Valor invalido');
@@ -75,7 +77,7 @@ class Ui {
     String? opc;
     do {
       print(
-          'Digite 1 para criar, 2 para alterar, 3 para excluir, 4 para listar ou 5 para sair');
+          'Sobre professores: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de professores \n5-voltar');
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
@@ -91,7 +93,6 @@ class Ui {
           listarProfessor();
           break;
         case '5':
-          print('Saindo...');
           break;
         default:
           print('Valor invalido');
@@ -103,7 +104,7 @@ class Ui {
     String? opc;
     do {
       print(
-          'Digite 1 para criar, 2 para alterar, 3 para excluir, 4 para listar ou 5 para sair');
+          'Sobre cursos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de cursos \n5-voltar');
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
@@ -119,7 +120,6 @@ class Ui {
           listarCurso();
           break;
         case '5':
-          print('Saindo...');
           break;
         default:
           print('Valor invalido');
@@ -149,15 +149,16 @@ class Ui {
   void alterarAluno() {
     print('Informe o email do Aluno');
     String email = stdin.readLineSync()!;
-    bool verificaExistencia = pessoaService.cadastroExiste(email);
-    if (verificaExistencia) {
+    Pessoa? isAluno = pessoaService.busca(email, null);
+    if (isAluno != null && isAluno is Aluno) {
       print('Informe o nome do Aluno');
       String? nome = stdin.readLineSync();
       print('Informe o nascimento do Aluno no formato 00/00/0000');
       DateTime? nascimento = df.parse(stdin.readLineSync()!);
       print('Informe o endereço do Aluno');
       String? endereco = stdin.readLineSync();
-      pessoaService.altera(email, nome, nascimento, endereco, null);
+      pessoaService.altera(
+          isAluno.codigo!, email, nome, nascimento, endereco, null);
     } else {
       print('Cadastro não encontrado');
     }
@@ -203,9 +204,8 @@ class Ui {
   void alterarProfessor() {
     print('Informe o email do Professor');
     String email = stdin.readLineSync()!;
-    bool verificaExiste = pessoaService.cadastroExiste(email);
     Pessoa? isProfessor = pessoaService.busca(email, null);
-    if (verificaExiste && isProfessor is Professor) {
+    if (isProfessor != null && isProfessor is Professor) {
       print('Informe o nome do Professor');
       String? nome = stdin.readLineSync();
       print('Informe o nascimento do Professor no formato 00/00/0000');
@@ -214,7 +214,8 @@ class Ui {
       String? endereco = stdin.readLineSync();
       print('Informe o salário do Professor');
       double? salario = double.tryParse(stdin.readLineSync()!);
-      pessoaService.altera(email, nome, nascimento, endereco, salario);
+      pessoaService.altera(
+          isProfessor.codigo!, email, nome, nascimento, endereco, salario);
     } else {
       print('Cadastro não encontrado');
     }
@@ -237,29 +238,32 @@ class Ui {
   void criarCurso() {
     print('Informe o nome do Curso');
     String nome = stdin.readLineSync()!;
-    if(!cursoService.cursoExiste(null, nome)){
+    if (!cursoService.cursoExiste(null, nome)) {
       print('Informe o total de alunos do Curso');
       int totalAlunos = int.parse(stdin.readLineSync()!);
       Curso curso = Curso(nome, totalAlunos);
       cursoService.adiciona(curso);
-    }else{
+    } else {
       print('Curso já existe');
     }
-
-    
   }
 
   void alterarCurso() {
     cursoService.mostraCodigos();
     print('Informe o código do curso para alterar');
     int codigo = int.parse(stdin.readLineSync()!);
-    if(cursoService.cursoExiste(codigo, null)){
+    if (cursoService.cursoExiste(codigo, null)) {
       print('Informe o nome do Curso');
       String? nome = stdin.readLineSync();
       print('Informe o total de alunos do Curso');
       int? totalAlunos = int.tryParse(stdin.readLineSync()!);
       cursoService.altera(codigo, nome, totalAlunos);
-    }else{
+      print('Deseja alterar pessoas do curso? \n1-Sim \n2-Não');
+      String? opc = stdin.readLineSync();
+      if (opc == '1') {
+        alterarPessoasCurso(codigo);
+      }
+    } else {
       print('Curso não encontrado');
     }
   }
@@ -268,15 +272,64 @@ class Ui {
     cursoService.mostraCodigos();
     print('Informe o código do Curso');
     int? codigoCurso = int.tryParse(stdin.readLineSync()!);
-    if(cursoService.cursoExiste(codigoCurso, null)){
+    if (cursoService.cursoExiste(codigoCurso, null)) {
       cursoService.excluir(codigoCurso!);
-    }else{
+    } else {
       print('Curso não encontrado');
     }
   }
 
   void listarCurso() {
     cursoService.listar();
+  }
+
+  void alterarPessoasCurso(int codigo) {
+    String? opc;
+    do {
+      print(
+          'Alterações de pessoas: \n1-Adicionar Professor \n2-Adicionar Aluno \n3-Manipular notas do aluno \n4-Remover Professor \n5-Remover Aluno \n6-Voltar');
+      opc = stdin.readLineSync();
+      switch (opc) {
+        case '1':
+          pessoaService.buscarCodigo(false);
+          print('Informe o código do professor');
+          int codigoP = int.parse(stdin.readLineSync()!);
+          cursoService.adicionarPessoa(codigo, codigoP, false);
+          break;
+        case '2':
+          pessoaService.buscarCodigo(true);
+          print('Informe o códgio do aluno');
+          int codigoP = int.parse(stdin.readLineSync()!);
+          cursoService.adicionarPessoa(codigo, codigoP, false);
+          break;
+        case '3':
+          cursoService.mostraPessoaCurso(codigo);
+          print('Informe o código do aluno');
+          int codigoP = int.parse(stdin.readLineSync()!);
+          print('Digite: \n1-Adicionar nota \n2-Remover notas');
+          String? opcao = stdin.readLineSync();
+          if (opcao == '1') {
+            cursoService.adicionaNota(codigo, codigoP);
+          } else {
+            cursoService.removeNota(codigo, codigoP);
+          }
+          break;
+        case '4':
+          pessoaService.buscarCodigo(false);
+          int codigoP = int.parse(stdin.readLineSync()!);
+          cursoService.removerPessoa(codigo, codigoP);
+          break;
+        case '5':
+          pessoaService.buscarCodigo(true);
+          int codigoP = int.parse(stdin.readLineSync()!);
+          cursoService.removerPessoa(codigo, codigoP);
+          break;
+        case '6':
+          break;
+        default:
+          print('Opção invalida');
+      }
+    } while (opc != '6');
   }
 }
 
