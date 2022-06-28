@@ -47,81 +47,95 @@ class Ui {
   }
 
   void aluno() {
-    String? opc;
-    do {
-      print('\nSobre alunos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de alunos \n5-voltar');
-      opc = stdin.readLineSync()!;
-      switch (opc) {
-        case '1':
-          criarAluno();
-          break;
-        case '2':
-          alterarAluno();
-          break;
-        case '3':
-          excluirAluno();
-          break;
-        case '4':
-          listarAluno();
-          break;
-        case '5':
-          break;
-        default:
-          print('Valor invalido');
-      }
-    } while (opc != '5');
+    try {
+      String? opc;
+      do {
+        print('\nSobre alunos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de alunos \n5-voltar');
+        opc = stdin.readLineSync()!;
+        switch (opc) {
+          case '1':
+            criarAluno();
+            break;
+          case '2':
+            alterarAluno();
+            break;
+          case '3':
+            excluirAluno();
+            break;
+          case '4':
+            listarAluno();
+            break;
+          case '5':
+            break;
+          default:
+            print('Valor invalido');
+        }
+      } while (opc != '5');
+    } catch (e) {
+      print(e);
+    }
   }
 
   void professor() {
-    String? opc;
-    do {
-      print('\nSobre professores: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de professores \n5-voltar');
-      opc = stdin.readLineSync()!;
-      switch (opc) {
-        case '1':
-          criarProfessor();
-          break;
-        case '2':
-          alterarProfessor();
-          break;
-        case '3':
-          excluirProfessor();
-          break;
-        case '4':
-          listarProfessor();
-          break;
-        case '5':
-          break;
-        default:
-          print('Valor invalido');
-      }
-    } while (opc != '5');
+    try {
+      
+      String? opc;
+      do {
+        print('\nSobre professores: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de professores \n5-voltar');
+        opc = stdin.readLineSync()!;
+        switch (opc) {
+          case '1':
+            criarProfessor();
+            break;
+          case '2':
+            alterarProfessor();
+            break;
+          case '3':
+            excluirProfessor();
+            break;
+          case '4':
+            listarProfessor();
+            break;
+          case '5':
+            break;
+          default:
+            print('Valor invalido');
+        }
+      } while (opc != '5');
+    } catch (e) {
+      print(e);
+    }
   }
 
   void curso() {
-    String? opc;
-    do {
-      print('\nSobre cursos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de cursos \n5-voltar');
-      opc = stdin.readLineSync()!;
-      switch (opc) {
-        case '1':
-          criarCurso();
-          break;
-        case '2':
-          alterarCurso();
-          break;
-        case '3':
-          excluirCurso();
-          break;
-        case '4':
-          listarCurso();
-          break;
-        case '5':
-          break;
-        default:
-          print('Valor invalido');
-      }
-    } while (opc != '5');
+    try {
+      
+      String? opc;
+      do {
+        print('\nSobre cursos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de cursos \n5-voltar');
+        opc = stdin.readLineSync()!;
+        switch (opc) {
+          case '1':
+            criarCurso();
+            break;
+          case '2':
+            alterarCurso();
+            break;
+          case '3':
+            excluirCurso();
+            break;
+          case '4':
+            listarCurso();
+            break;
+          case '5':
+            break;
+          default:
+            print('Valor invalido');
+        }
+      } while (opc != '5');
+    } catch (e) {
+      print(e);
+    }
   }
 
   void criarAluno() {
