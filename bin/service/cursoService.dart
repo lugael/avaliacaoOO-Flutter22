@@ -15,11 +15,13 @@ class CursoService {
   CursoService(this.cursoRepository);
 
   adiciona(Curso curso) {
-    cursoRepository.criarCurso(curso);
+    bool cadastrou = cursoRepository.criarCurso(curso);
+    cadastrou ? print('Curso cadastrado') : print('Não foi possível cadastrar curso');
   }
 
   altera(int codigo, String? nome, int? qtdPessoas) {
-    cursoRepository.alterarCurso(codigo, nome, qtdPessoas, null);
+    bool alterou = cursoRepository.alterarCurso(codigo, nome, qtdPessoas, null);
+    alterou ? print('Curso alterado') : print('Não foi possível alterar curso');
   }
 
   bool cursoExiste(int? codigo, String? nome) {
@@ -41,7 +43,8 @@ class CursoService {
   excluir(int codigo) {
     Curso? curso = cursoRepository.buscaCurso(codigo);
     if (curso!.pessoas.isEmpty) {
-      cursoRepository.excluirCurso(curso);
+      bool excluiu = cursoRepository.excluirCurso(curso);
+      excluiu ? print('Curso foi excluido') : print('Não foi excluir o curso');
     } else {
       print('Curso possui aluno');
     }
@@ -61,7 +64,8 @@ class CursoService {
         bool contem = curso.pessoas.contains(pessoa);
         if (!contem) {
           curso.pessoas.add(pessoa!);
-          cursoRepository.alterarCurso(codigo, null, null, curso.pessoas);
+          bool adicionou = cursoRepository.alterarCurso(codigo, null, null, curso.pessoas);
+          adicionou ? print('Aluno adicionado') : print('Não foi possível adicionar o aluno');
         }else{
           print('Aluno já cadastrada no curso');
         }
@@ -73,7 +77,8 @@ class CursoService {
        bool contem = curso!.pessoas.contains(pessoa);
       if(pessoa is Professor && !contem){
         curso.pessoas.add(pessoa);
-        cursoRepository.alterarCurso(codigo, null, null, curso.pessoas);
+        bool adicionou = cursoRepository.alterarCurso(codigo, null, null, curso.pessoas);
+        adicionou ? print('Aluno adicionado') : print('Não foi possível adicionar o aluno');
       }else{
         print('Não foi possivel cadastar, verifique se o cadastro existe ou já não faz parte do curso');
       }
@@ -82,7 +87,8 @@ class CursoService {
 
   removerPessoa(int codigo, int codigoP) {
     Pessoa? pessoa = pessoaService.busca(null, codigoP);
-    cursoRepository.removePessoa(codigo, pessoa!);
+    bool removeuPessoa = cursoRepository.removePessoa(codigo, pessoa!);
+    removeuPessoa ? print('Pessoa removida') : print('Não foi possível remover pessoa');
   }
 
   mostraPessoaCurso(int codigo) {

@@ -4,11 +4,11 @@ import '../model/pessoa.dart';
 
 abstract class IPessoaRepository {
 
-  adicionarPessoa(Pessoa pessoa);
+  bool adicionarPessoa(Pessoa pessoa);
 
-  alterarPessoa(int? codigo,String? email, String? nome, DateTime? nascimento, String? endereco, double? salario);
+  bool alterarPessoa(int? codigo,String? email, String? nome, DateTime? nascimento, String? endereco, double? salario);
 
-  excluirPessoa(Pessoa pessoa);
+  bool excluirPessoa(Pessoa pessoa);
 
   listarPessoa(bool isAluno);
 
@@ -16,9 +16,9 @@ abstract class IPessoaRepository {
 
   listarPorCodigo(bool isAluno);
 
-  adcionarNota(int codigo, NotaAluno notas);
+  bool adicionarNota(int codigo, NotaAluno notas);
 
-  removerNota(int codigoP, Curso curso);
+  bool removerNota(int codigoP, Curso curso);
 
-  alterarNota(NotaAluno nota, int codigo);
+  bool alterarNota(NotaAluno nota, int codigo);
 }

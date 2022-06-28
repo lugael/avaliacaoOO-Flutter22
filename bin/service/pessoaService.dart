@@ -13,13 +13,14 @@ class PessoaService {
   PessoaService(this.pessoaRepository);
 
   void adiciona(Pessoa pessoa) {
-    pessoaRepository.adicionarPessoa(pessoa);
+    bool cadastrou = pessoaRepository.adicionarPessoa(pessoa);
+    cadastrou ? print('Cadastrado') : '';
   }
 
   void altera(int codigo, String? email, String? nome, DateTime? nascimento,
-      String? endereco, double? salario) {
-    pessoaRepository.alterarPessoa(
-        codigo, email, nome, nascimento, endereco, salario);
+    String? endereco, double? salario) {
+    bool alterou = pessoaRepository.alterarPessoa(codigo, email, nome, nascimento, endereco, salario);
+    alterou ? print('Cadastro Alterado') : print('Não foi possivel alterar o cadastro');
   }
 
   void excluir(String? email) {
@@ -27,7 +28,8 @@ class PessoaService {
     if (cadastroExiste != null) {
       bool verifica = cursoService.existeAluno(cadastroExiste);
       if (!verifica) {
-        pessoaRepository.excluirPessoa(cadastroExiste);
+        bool excluiuCadastro = pessoaRepository.excluirPessoa(cadastroExiste);
+        excluiuCadastro ? print('Cadastro excluido') : print('Não foi possivel excluir o cadastro');
       } else {
         print('O aluno faz parte de um curso');
       }
@@ -53,15 +55,18 @@ class PessoaService {
   }
 
   void adiconaNota(int codigo, NotaAluno notas) {
-    pessoaRepository.adcionarNota(codigo, notas);
+    bool  adicionouNota = pessoaRepository.adicionarNota(codigo, notas);
+    adicionouNota ? print('Nota adicionada') : print('Não foi possivel adicionar nota');
   }
 
   void removerNota(int codigo, Curso curso) {
-    pessoaRepository.removerNota(codigo, curso);
+    bool removeuNota = pessoaRepository.removerNota(codigo, curso);
+    removeuNota ? print('Nota removida') : print('Não foi possivel excluir nota');
   }
 
   void alterarNota(NotaAluno notas, int codigoP){
-    pessoaRepository.alterarNota(notas, codigoP);
+    bool alterouNota = pessoaRepository.alterarNota(notas, codigoP);
+    alterouNota ? print('Nota Alterada') : print('Não foi possivel alterar nota');
   }
 
   void calcularMedia(Curso curso, int codigoP){

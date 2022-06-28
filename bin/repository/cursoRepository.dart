@@ -6,12 +6,13 @@ class CursoRepository implements ICursoRepository {
   List<Curso> cursos = [];
 
   @override
-  void criarCurso(Curso curso) {
+  bool criarCurso(Curso curso) {
     cursos.add(curso);
+    return true;
   }
 
   @override
-  bool? alterarCurso(
+  bool alterarCurso(
       int codigo, String? nome, int? qtdPessoas, List<Pessoa>? pessoas) {
     return cursos.any((element) {
       if (element.codigo == codigo) {
@@ -25,8 +26,9 @@ class CursoRepository implements ICursoRepository {
   }
 
   @override
-  void excluirCurso(Curso curso) {
+  bool excluirCurso(Curso curso) {
     cursos.remove(curso);
+    return true;
   }
 
   @override
@@ -69,12 +71,14 @@ class CursoRepository implements ICursoRepository {
   }
 
   @override
-  removePessoa(int codigo, Pessoa pessoa) {
+  bool removePessoa(int codigo, Pessoa pessoa) {
     for (var item in cursos) {
       if(item.codigo == codigo){
         item.pessoas.removeWhere((element) => element.codigo == pessoa.codigo);
+        return true;
       }
     }
+    return false;
   }
 
 }

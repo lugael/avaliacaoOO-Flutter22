@@ -9,13 +9,13 @@ class PessoaRepository implements IPessoaRepository {
   List<Pessoa> pessoas = [];
 
   @override
-  adicionarPessoa(Pessoa pessoa) {
+  bool adicionarPessoa(Pessoa pessoa) {
     pessoas.add(pessoa);
-    print('Cadastrado realizado');
+    return true;
   }
 
   @override
-  bool? alterarPessoa(int? codigo, String? email, String? nome,
+  bool alterarPessoa(int? codigo, String? email, String? nome,
       DateTime? nascimento, String? endereco, double? salario) {
     return pessoas.any((element) {
       if (element.codigo == codigo) {
@@ -26,7 +26,6 @@ class PessoaRepository implements IPessoaRepository {
         if (element is Professor) {
           salario != null ? element.salario = salario : '';
         }
-        print('Cadastro Alterado');
         return true;
       }
       return false;
@@ -34,8 +33,9 @@ class PessoaRepository implements IPessoaRepository {
   }
 
   @override
-  excluirPessoa(Pessoa pessoa) {
+  bool excluirPessoa(Pessoa pessoa) {
     pessoas.remove(pessoa);
+    return true;
   }
 
   @override
@@ -75,8 +75,8 @@ class PessoaRepository implements IPessoaRepository {
   }
 
   @override
-  adcionarNota(int codigo, NotaAluno notas) {
-    pessoas.any((element) {
+  bool adicionarNota(int codigo, NotaAluno notas) {
+    return pessoas.any((element) {
       if (element is Aluno) {
         if (element.codigo == codigo) {
           element.notas.add(notas);
@@ -89,22 +89,28 @@ class PessoaRepository implements IPessoaRepository {
   }
 
   @override
-  removerNota(int codigoP, Curso curso) {
+  bool removerNota(int codigoP, Curso curso) {
     Pessoa pessoa = pessoas.firstWhere((element) => element.codigo == codigoP);
     if(pessoa is Aluno){
       pessoa.notas.removeWhere((element) => element.curso == curso);
       print('Notas Excluida');
+      return true;
     }
+    return false;
   }
 
   @override
-  alterarNota(NotaAluno nota, int codigo){
+  bool alterarNota(NotaAluno nota, int codigo){
     for (var item in pessoas) {
       if (item is Aluno) {
         for (var notas in item.notas) {
-          notas.curso == nota.curso ? notas = nota : '';
+          if(notas.curso == nota.curso){
+            notas = nota;
+            return true;
+          } 
         }
       }
     }
+    return false;
   }
 }
