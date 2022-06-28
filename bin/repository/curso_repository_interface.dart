@@ -3,11 +3,21 @@ import '../model/pessoa.dart';
 
 abstract class ICursoRepository {
 
-  void criarCurso (Curso curso);
+  criarCurso (Curso curso);
 
-  bool? alterarCurso (int codigo, String? nome, int? qtdPessoas, List<Pessoa> pessoas);
+  bool? alterarCurso (int codigo, String? nome, int? qtdPessoas, List<Pessoa>? pessoas);
 
-  void excluirCurso (Curso curso);
+  excluirCurso (Curso curso);
 
-  void listarCurso ();
+  listarCurso ();
+
+  bool cursoExiste(int? codigo, String? nome);
+
+  bool existeAluno(Pessoa aluno);
+
+  listarCodigo();
+
+  Curso? buscaCurso(int codigo);
+
+  removePessoa(int codigo, Pessoa pessoa);
 }

@@ -1,3 +1,4 @@
+import '../model/aluno.dart';
 import '../model/curso.dart';
 import '../model/notaAluno.dart';
 import '../model/pessoa.dart';
@@ -57,5 +58,28 @@ class PessoaService {
 
   void removerNota(int codigo, Curso curso) {
     pessoaRepository.removerNota(codigo, curso);
+  }
+
+  void alterarNota(NotaAluno notas, int codigoP){
+    pessoaRepository.alterarNota(notas, codigoP);
+  }
+
+  void calcularMedia(Curso curso, int codigoP){
+    Pessoa? pessoa = pessoaRepository.buscarPessoa(null, codigoP);
+    double? media;
+
+    if(pessoa is Aluno){
+      for (var item in pessoa.notas) {
+        if(item.curso.codigo == curso.codigo){
+          media = item.notas.reduce((value, element) => value + element);
+          media = media / item.notas.length;
+        }
+      }
+    }
+    if(media != null){
+      print('Aluno: ${pessoa!.nome} \nMédia: $media');
+    }else{
+      print('Não foi possivel salvar média do aluno');
+    }
   }
 }

@@ -9,9 +9,9 @@ class PessoaRepository implements IPessoaRepository {
   List<Pessoa> pessoas = [];
 
   @override
-  void adicionarPessoa(Pessoa pessoa) {
+  adicionarPessoa(Pessoa pessoa) {
     pessoas.add(pessoa);
-    print('object');
+    print('Cadastrado realizado');
   }
 
   @override
@@ -26,6 +26,7 @@ class PessoaRepository implements IPessoaRepository {
         if (element is Professor) {
           salario != null ? element.salario = salario : '';
         }
+        print('Cadastro Alterado');
         return true;
       }
       return false;
@@ -33,12 +34,12 @@ class PessoaRepository implements IPessoaRepository {
   }
 
   @override
-  void excluirPessoa(Pessoa pessoa) {
+  excluirPessoa(Pessoa pessoa) {
     pessoas.remove(pessoa);
   }
 
   @override
-  void listarPessoa(bool isAluno) {
+  listarPessoa(bool isAluno) {
     for (var pessoa in pessoas) {
       if (pessoa is Aluno && isAluno) {
         print(pessoa);
@@ -62,7 +63,8 @@ class PessoaRepository implements IPessoaRepository {
     return null;
   }
 
-  void listarPorCodigo(bool isAluno) {
+  @override
+  listarPorCodigo(bool isAluno) {
     for (var pessoa in pessoas) {
       if (pessoa is Aluno && isAluno) {
         print('Código: ${pessoa.codigo} Nome: ${pessoa.nome}');
@@ -72,11 +74,13 @@ class PessoaRepository implements IPessoaRepository {
     }
   }
 
-  void adcionarNota(int codigo, NotaAluno notas) {
+  @override
+  adcionarNota(int codigo, NotaAluno notas) {
     pessoas.any((element) {
       if (element is Aluno) {
         if (element.codigo == codigo) {
           element.notas.add(notas);
+          print('Nota(s) adicionada(s)');
           return true;
         }
       }
@@ -84,10 +88,23 @@ class PessoaRepository implements IPessoaRepository {
     });
   }
 
-  void removerNota(int codigoP, Curso curso) {
+  @override
+  removerNota(int codigoP, Curso curso) {
     Pessoa pessoa = pessoas.firstWhere((element) => element.codigo == codigoP);
     if(pessoa is Aluno){
       pessoa.notas.removeWhere((element) => element.curso == curso);
+      print('Notas Excluida');
+    }
+  }
+
+  @override
+  alterarNota(NotaAluno nota, int codigo){
+    for (var item in pessoas) {
+      if (item is Aluno) {
+        for (var notas in item.notas) {
+          notas.curso == nota.curso ? notas = nota : '';
+        }
+      }
     }
   }
 }

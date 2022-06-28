@@ -20,15 +20,16 @@ class Curso {
     String alunos = '';
     for (var pessoa in pessoas) {
       if (pessoa is Professor) {
-        profesores + 'Professor: ${pessoa.nome}';
+        profesores += '\n${pessoa.nome}';
       }
     }
-     for (var pessoa in pessoas) {
+    for (var pessoa in pessoas) {
       if (pessoa is Aluno) {
-        alunos + 'Aluno: ${pessoa.nome}';
+        alunos += '\n${pessoa.nome}';
       }
     }
-    return 'Codigo: $codigo \nNome: $nome \nTotal de alunos: $totalAlunos ${profesores != '' ? }\nProfessores: $listarProfesores() \nAlunos: $listarAlunos()';
+
+    return 'Codigo: $codigo \nNome: $nome \nTotal de alunos: $totalAlunos \nProfessores:${profesores != '' ?  profesores : 'Sem professor' } \nAlunos: ${alunos != '' ? alunos : 'Sem alunos'}';
   }
 
 }

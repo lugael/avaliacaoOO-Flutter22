@@ -1,5 +1,7 @@
-import 'pessoa.dart';
+import 'package:intl/intl.dart';
 
+import 'pessoa.dart';
+DateFormat df = DateFormat('dd/MM/yyyy');
 class Professor extends Pessoa{
   double? salario;
 
@@ -7,6 +9,6 @@ class Professor extends Pessoa{
   
   @override
   String toString() {
-    return 'Código: $codigo \nNome:$nome \nEmail:$email \nNascimento:$nascimento \nEndereço:$endereco \nSalário:$salario';
+    return 'Código: $codigo \nNome:$nome \nEmail:$email \nNascimento:${df.format(nascimento)} \nEndereço:$endereco \nSalário:$salario';
   }
 }

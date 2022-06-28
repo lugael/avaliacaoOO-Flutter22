@@ -25,7 +25,7 @@ class Ui {
   void show() {
     String? opc;
     do {
-      print('Escolha: \n1-Alunos \n2-Professores \n3-Cursos \n4-Sair');
+      print('\nEscolha: \n1-Alunos \n2-Professores \n3-Cursos \n4-Sair');
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
@@ -49,8 +49,7 @@ class Ui {
   void aluno() {
     String? opc;
     do {
-      print(
-          'Sobre alunos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de alunos \n5-voltar');
+      print('\nSobre alunos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de alunos \n5-voltar');
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
@@ -76,8 +75,7 @@ class Ui {
   void professor() {
     String? opc;
     do {
-      print(
-          'Sobre professores: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de professores \n5-voltar');
+      print('\nSobre professores: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de professores \n5-voltar');
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
@@ -103,8 +101,7 @@ class Ui {
   void curso() {
     String? opc;
     do {
-      print(
-          'Sobre cursos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de cursos \n5-voltar');
+      print('\nSobre cursos: \n1-cadastrar \n2-alterar \n3-excluir \n4-lista de cursos \n5-voltar');
       opc = stdin.readLineSync()!;
       switch (opc) {
         case '1':
@@ -147,23 +144,24 @@ class Ui {
   }
 
   void alterarAluno() {
-    print('Informe o email do Aluno');
-    String email = stdin.readLineSync()!;
-    Pessoa? isAluno = pessoaService.busca(email, null);
+    pessoaService.buscarCodigo(true);
+    print('Informe o código do aluno');
+    int codigo = int.parse(stdin.readLineSync()!);
+    Pessoa? isAluno = pessoaService.busca(null, codigo);
     if (isAluno != null && isAluno is Aluno) {
-      print('Informe o nome do Aluno');
+      print('Informe o novo email do Aluno');
+      String email = stdin.readLineSync()!;
+      print('Informe o novo nome do Aluno');
       String? nome = stdin.readLineSync();
-      print('Informe o nascimento do Aluno no formato 00/00/0000');
+      print('Informe o nova nascimento do Aluno no formato 00/00/0000');
       DateTime? nascimento = df.parse(stdin.readLineSync()!);
-      print('Informe o endereço do Aluno');
+      print('Informe o novo endereço do Aluno');
       String? endereco = stdin.readLineSync();
       pessoaService.altera(
           isAluno.codigo!, email, nome, nascimento, endereco, null);
     } else {
       print('Cadastro não encontrado');
     }
-
-    // email - nome - nascimento - endereco
   }
 
   void excluirAluno() {
@@ -193,8 +191,7 @@ class Ui {
       String endereco = stdin.readLineSync()!;
       print('Informe o salário do Professor');
       double salario = double.parse(stdin.readLineSync()!);
-      Pessoa professor = Professor(
-          nome: nome, email: email, nascimento: nascimento, salario: salario);
+      Pessoa professor = Professor(nome: nome, email: email, nascimento: nascimento, salario: salario, endereco: endereco);
       pessoaService.adiciona(professor);
     } else {
       print('Cadastro já existe');
@@ -202,10 +199,13 @@ class Ui {
   }
 
   void alterarProfessor() {
-    print('Informe o email do Professor');
-    String email = stdin.readLineSync()!;
-    Pessoa? isProfessor = pessoaService.busca(email, null);
+    pessoaService.buscarCodigo(false);
+    print('Informe o código do professor');
+    int codigo = int.parse(stdin.readLineSync()!);
+    Pessoa? isProfessor = pessoaService.busca(null, codigo);
     if (isProfessor != null && isProfessor is Professor) {
+      print('Informe o email do Professor');
+      String email = stdin.readLineSync()!;
       print('Informe o nome do Professor');
       String? nome = stdin.readLineSync();
       print('Informe o nascimento do Professor no formato 00/00/0000');
@@ -253,15 +253,18 @@ class Ui {
     print('Informe o código do curso para alterar');
     int codigo = int.parse(stdin.readLineSync()!);
     if (cursoService.cursoExiste(codigo, null)) {
-      print('Informe o nome do Curso');
-      String? nome = stdin.readLineSync();
-      print('Informe o total de alunos do Curso');
-      int? totalAlunos = int.tryParse(stdin.readLineSync()!);
-      cursoService.altera(codigo, nome, totalAlunos);
-      print('Deseja alterar pessoas do curso? \n1-Sim \n2-Não');
-      String? opc = stdin.readLineSync();
-      if (opc == '1') {
+      print('Dejese alterar dados \n1-Curso \n2-Pessoas do curso');
+      String opc = stdin.readLineSync()!;
+      if(opc == '1'){
+        print('Informe o nome do Curso');
+        String? nome = stdin.readLineSync();
+        print('Informe o total de alunos do Curso');
+        int? totalAlunos = int.tryParse(stdin.readLineSync()!);
+        cursoService.altera(codigo, nome, totalAlunos);
+      }else if(opc == '2'){
         alterarPessoasCurso(codigo);
+      }else{
+        print('Opção invalida');
       }
     } else {
       print('Curso não encontrado');
@@ -286,8 +289,7 @@ class Ui {
   void alterarPessoasCurso(int codigo) {
     String? opc;
     do {
-      print(
-          'Alterações de pessoas: \n1-Adicionar Professor \n2-Adicionar Aluno \n3-Manipular notas do aluno \n4-Remover Professor \n5-Remover Aluno \n6-Voltar');
+      print('\nAlterações de pessoas: \n1-Adicionar Professor \n2-Adicionar Aluno \n3-Manipular notas do aluno \n4-Remover Professor \n5-Remover Aluno \n6-Voltar');
       opc = stdin.readLineSync();
       switch (opc) {
         case '1':
@@ -298,21 +300,15 @@ class Ui {
           break;
         case '2':
           pessoaService.buscarCodigo(true);
-          print('Informe o códgio do aluno');
+          print('Informe o código do aluno');
           int codigoP = int.parse(stdin.readLineSync()!);
-          cursoService.adicionarPessoa(codigo, codigoP, false);
+          cursoService.adicionarPessoa(codigo, codigoP, true);
           break;
         case '3':
           cursoService.mostraPessoaCurso(codigo);
           print('Informe o código do aluno');
           int codigoP = int.parse(stdin.readLineSync()!);
-          print('Digite: \n1-Adicionar nota \n2-Remover notas');
-          String? opcao = stdin.readLineSync();
-          if (opcao == '1') {
-            cursoService.adicionaNota(codigo, codigoP);
-          } else {
-            cursoService.removeNota(codigo, codigoP);
-          }
+          notasAluno(codigo, codigoP);
           break;
         case '4':
           pessoaService.buscarCodigo(false);
@@ -331,6 +327,25 @@ class Ui {
       }
     } while (opc != '6');
   }
-}
 
-// criarAluno, alterar, excluir, listar
+  void notasAluno(int codigo, int codigoP) {
+    print('Digite: \n1-Adicionar nota \n2-Alterar nota \n3-Remover notas \n4-Exibir Média');
+    String? opcao = stdin.readLineSync();
+    switch (opcao) {
+      case '1':
+        cursoService.adicionaNota(codigo, codigoP);
+        break;
+      case '2':
+        cursoService.alterarNota(codigo, codigoP);
+        break;
+      case '3':
+        cursoService.removeNota(codigo, codigoP);
+        break;
+      case '4':
+        cursoService.exibirMedia(codigo, codigoP);
+        break;
+      default:
+        print('Opção invalida');
+    }
+  }
+}

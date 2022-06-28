@@ -4,96 +4,97 @@ import '../model/aluno.dart';
 import '../model/curso.dart';
 import '../model/notaAluno.dart';
 import '../model/pessoa.dart';
-import '../repository/cursoRepository.dart';
+
+import '../model/professor.dart';
+import '../repository/curso_repository_interface.dart';
 import 'pessoaService.dart';
 
 class CursoService {
-  CursoRepository cursoRepository;
+  ICursoRepository cursoRepository;
   late PessoaService pessoaService;
   CursoService(this.cursoRepository);
 
-  void adiciona(Curso curso) {
+  adiciona(Curso curso) {
     cursoRepository.criarCurso(curso);
   }
 
-  void altera(int codigo, String? nome, int? qtdPessoas) {
+  altera(int codigo, String? nome, int? qtdPessoas) {
     cursoRepository.alterarCurso(codigo, nome, qtdPessoas, null);
   }
 
   bool cursoExiste(int? codigo, String? nome) {
-    if (codigo != null) {
-      return cursoRepository.cursos.any((element) => element.codigo == codigo);
-    } else if (nome != null) {
-      return cursoRepository.cursos.any((element) => element.nome == nome);
-    }
-    return false;
+    return cursoRepository.cursoExiste(codigo, nome);
   }
 
   bool existeAluno(Pessoa aluno) {
     return cursoRepository.existeAluno(aluno);
   }
 
-  void mostraCodigos() {
+  mostraCodigos() {
     cursoRepository.listarCodigo();
   }
 
-  void listar() {
+  listar() {
     cursoRepository.listarCurso();
   }
 
-  void excluir(int codigo) {
-    Curso curso = cursoRepository.cursos
-        .firstWhere((element) => element.codigo == codigo);
-    if (curso.pessoas.isEmpty) {
+  excluir(int codigo) {
+    Curso? curso = cursoRepository.buscaCurso(codigo);
+    if (curso!.pessoas.isEmpty) {
       cursoRepository.excluirCurso(curso);
     } else {
       print('Curso possui aluno');
     }
   }
 
-  void adicionarPessoa(int codigo, int codigoP, bool isAluno) {
-    Curso curso = cursoRepository.cursos
-        .firstWhere((element) => element.codigo == codigo);
+  adicionarPessoa(int codigo, int codigoP, bool isAluno) {
+    Curso? curso = cursoRepository.buscaCurso(codigo);
     if (isAluno) {
       int quantidade = 0;
-      for (var pessoa in curso.pessoas) {
+      for (var pessoa in curso!.pessoas) {
         if (pessoa is Aluno) {
           quantidade++;
         }
       }
-      if (curso.totalAlunos < quantidade) {
+      if (curso.totalAlunos > quantidade) {
         Pessoa? pessoa = pessoaService.busca(null, codigoP);
-        curso.pessoas.add(pessoa!);
-        cursoRepository.alterarCurso(codigo, null, null, curso.pessoas);
+        bool contem = curso.pessoas.contains(pessoa);
+        if (!contem) {
+          curso.pessoas.add(pessoa!);
+          cursoRepository.alterarCurso(codigo, null, null, curso.pessoas);
+        }else{
+          print('Aluno já cadastrada no curso');
+        }
       } else {
         print('Curso está cheio');
       }
-    } else {
+    } else if(!isAluno) {
       Pessoa? pessoa = pessoaService.busca(null, codigoP);
-      curso.pessoas.add(pessoa!);
-      cursoRepository.alterarCurso(codigo, null, null, curso.pessoas);
+       bool contem = curso!.pessoas.contains(pessoa);
+      if(pessoa is Professor && !contem){
+        curso.pessoas.add(pessoa);
+        cursoRepository.alterarCurso(codigo, null, null, curso.pessoas);
+      }else{
+        print('Não foi possivel cadastar, verifique se o cadastro existe ou já não faz parte do curso');
+      }
     }
   }
 
-  void removerPessoa(int codigo, int codigoP) {
-    Curso curso = cursoRepository.cursos
-        .firstWhere((element) => element.codigo == codigo);
+  removerPessoa(int codigo, int codigoP) {
     Pessoa? pessoa = pessoaService.busca(null, codigoP);
-    curso.pessoas.removeWhere((element) => element == pessoa);
+    cursoRepository.removePessoa(codigo, pessoa!);
   }
 
-  void mostraPessoaCurso(int codigo) {
-    Curso curso = cursoRepository.cursos
-        .firstWhere((element) => element.codigo == codigo);
-    for (var pessoa in curso.pessoas) {
+  mostraPessoaCurso(int codigo) {
+    Curso? curso = cursoRepository.buscaCurso(codigo);
+    for (var pessoa in curso!.pessoas) {
       pessoa is Aluno ? print('Código: ${pessoa.codigo} \nAluno: ${pessoa.nome}') : '';
     }
   }
 
-  void adicionaNota(int codigo, int codigoP) {
+  adicionaNota(int codigo, int codigoP) {
     Pessoa? pessoa = pessoaService.busca(null, codigoP);
-    Curso curso = cursoRepository.cursos
-        .firstWhere((element) => element.codigo == codigo);
+    Curso? curso = cursoRepository.buscaCurso(codigo);
     if (pessoa is Aluno) {
       bool existeCursoNota = pessoa.notas.contains(curso);
       if (pessoa.notas.isNotEmpty && existeCursoNota) {
@@ -113,21 +114,48 @@ class CursoService {
           print('Informe a ${i + 1}ª nota');
           double nota = double.parse(stdin.readLineSync()!);
           notas.add(nota);
-          print('Deseja adicionar outra nota? digite \n1-Sim \n2-não');
-          String opc = stdin.readLineSync()!;
-          if (opc == '2') {
-            i = 4;
+          if(i != 2){
+            print('Deseja adicionar outra nota? digite \n1-Sim \n2-não');
+            String opc = stdin.readLineSync()!;
+            if (opc == '2') {
+              i = 4;
+            }
           }
         }
-        NotaAluno notasALuno = NotaAluno(notas, curso);
+        NotaAluno notasALuno = NotaAluno(notas, curso!);
         pessoaService.adiconaNota(codigoP, notasALuno);
       }
     }
   }
 
-  void removeNota(int codigo, int codigoP) {
-    Curso curso = cursoRepository.cursos
-        .firstWhere((element) => element.codigo == codigo);
-    pessoaService.removerNota(codigoP, curso);
+  removeNota(int codigo, int codigoP) {
+    Curso? curso = cursoRepository.buscaCurso(codigo);
+    pessoaService.removerNota(codigoP, curso!);
+  }
+
+  alterarNota(int codigo, int codigoP){
+    Curso? curso = cursoRepository.buscaCurso(codigo);
+    Pessoa? pessoa = pessoaService.busca(null, codigoP);
+    if(pessoa is Aluno){
+      NotaAluno nota = pessoa.notas.firstWhere((element) => element.curso == curso);
+      for (var i = 0; i < nota.notas.length; i++) {
+        print('${i+1}ª nota: ${nota.notas[i]}');
+      }
+      print('Informe o qual a possição da nota');
+      int posicao = int.parse(stdin.readLineSync()!);
+      if ((posicao - 1) < nota.notas.length) {
+        print('Informe a nova nota');
+        double notaNova = double.parse(stdin.readLineSync()!);
+        nota.notas[posicao-1] = notaNova;
+        pessoaService.alterarNota(nota, codigoP);
+      }else{
+        print('Posição incorreta');
+      }
+    }
+  }
+
+  exibirMedia(int codigo, int codigoP){
+    Curso? curso = cursoRepository.buscaCurso(codigo);
+    pessoaService.calcularMedia(curso!, codigoP);
   }
 }
